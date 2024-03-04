@@ -15,14 +15,23 @@ public class PruebaExcepcionesChecked2 {
 		
 		System.out.println("Teclea un número");
 		int a = 0;
+		
 		try {
 			a = Integer.parseInt(teclado.readLine());
-		} catch (NumberFormatException e) {
-			System.out.println("El formato no es correcto");
-		} catch (IOException e) {
-			System.out.println("Error en el teclado");
+		} catch (NumberFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
+		
+//		try {
+//			a = Integer.parseInt(teclado.readLine());
+//		} catch (NumberFormatException e) {
+//			System.out.println("El formato no es correcto");
+//		} catch (IOException e) {
+//			System.out.println("Error en el teclado");
+//		}
+//		
 		System.out.println("El valor tecleado es: " + a);
 
 	}
