@@ -39,15 +39,24 @@ public class Parking {
 		return "Parking [capacidad=" + capacidad + ", tickets=" + tickets + "]";
 	}
 	
+	public Ticket getTicket(String matricula) { //Busca un ticket dada una matrícula.
+		for (Ticket ticket : tickets) {
+			if (ticket.getMatricula().equals(matricula)) {
+				return ticket;
+			}
+		}
+		return null;
+	}
 	
 	public void add(Ticket a) throws TicketException {
 		if (this.tickets.size()== this.capacidad) {
 			throw new TicketException("Parking lleno");
-		} else  if (tickets.contains(a)){
+		} 
+		if (this.getTicket(a.getMatricula()) !=null){
 			throw new TicketException("Ya está esta matricula");
-		} else {
+		} 
 			tickets.add(a);
-		}
+		
 	}
 	
 	public void remove(Ticket a) throws TicketException {
