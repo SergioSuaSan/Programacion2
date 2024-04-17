@@ -2,7 +2,7 @@ package grupoAmigos;
 
 public class Prueba {
 
-	public static void main(String[] args) throws PandillaCompletaException, NoMeGustaTuNombreException {
+	public static void main(String[] args) throws PandillaCompletaException, NoMeGustaTuNombreException  {
 		
 		Pandilla p = new Pandilla(1);
 		
