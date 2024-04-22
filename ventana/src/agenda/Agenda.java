@@ -1,9 +1,14 @@
 package agenda;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Agenda {
+public class Agenda implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5784823701215021483L;
 	//Atributos
 	private ArrayList<Contacto> listaDeContactos;
 	
