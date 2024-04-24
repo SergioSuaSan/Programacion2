@@ -13,6 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.awt.event.InputEvent;
@@ -34,6 +36,7 @@ public class BlocDeNotas extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		
 					BlocDeNotas frame = new BlocDeNotas();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -78,10 +81,20 @@ public class BlocDeNotas extends JFrame {
 		mnArchivo.add(mntmAbrir);
 		
 		JMenuItem mntmGuardar = new JMenuItem("Guardar");
+		mntmGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			pulsadoGuardar();
+			}
+		});
 		mntmGuardar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
 		mnArchivo.add(mntmGuardar);
 		
 		JMenuItem mntmGuardarComo = new JMenuItem("Guardar como");
+		mntmGuardarComo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			pulsadoGuardarComo();
+			}
+		});
 		mnArchivo.add(mntmGuardarComo);
 		
 		JMenu mnEditar = new JMenu("Editar");
@@ -93,7 +106,7 @@ public class BlocDeNotas extends JFrame {
 
 	
 	private void pulsadoAbrir() {
-		//Debería salir un diálogoo para seleccionar el archivo (JFileChooser)
+		//Debería salir un diálogo para seleccionar el archivo (JFileChooser)
 		JFileChooser dialogo =new JFileChooser(gestor.getArchivo());
 		dialogo.showOpenDialog(this);
 		
@@ -110,9 +123,34 @@ public class BlocDeNotas extends JFrame {
 			for (String string : texto) {
 				textArea.append(string + "\n");
 			}
-		} else {
-			
-		}
-		
+			//Ponemos el nombre del archivo en el tútulo de la ventana
+			this.setTitle(gestor.getArchivo().getName() + ": bloc de notas");
+		} 
 	}
+	
+	
+	private void pulsadoGuardarComo() {
+		//Mostrar un dialogo para elegir el archivo donde guardar
+		JFileChooser dialogo = new JFileChooser(gestor.getArchivo());
+		dialogo.showSaveDialog(dialogo);
+		//Ahora habrá que preguntar si han seleccionado algo
+		if (dialogo.getSelectedFile() != null) {
+			//Le paso el archivo al gestor
+			this.gestor.setArchivo(dialogo.getSelectedFile());
+			//Pasamos al gestor el archivo que debe almacenar
+			gestor.setTexto(textArea.getText());
+		}
+	}
+	
+	private void pulsadoGuardar() {
+		// Preguntamos si tenemos un archivo elegido
+		if (gestor.getArchivo()== null)     {
+			this.pulsadoGuardarComo();
+		} else {
+			//Ya tenemos archivo seleccionado, guardamos directamente
+			gestor.setTexto(textArea.getText());
+		}
+	}
+	
+	
 }
