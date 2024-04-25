@@ -12,6 +12,7 @@ import blockDeNotas.GestorArchivoTexto;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -159,11 +160,14 @@ public class BuscarTexto extends JFrame {
 	//Luego podemos poner una palabra para filtrar y solo deben aparecer en el área de texto las líneas que contienen esa palabra.
 	private void pulsadoFiltrar() {
 		// TODO Auto-generated method stub
-		String filtro = textFieldFiltro.getText();
-
+		 	String filtro = textFieldFiltro.getText();
 			ArrayList<String> texto = this.gestor.getTexto();
 			
-			//Limpiar el area de texto
+			
+			if (gestor.getArchivo()== null) {
+				JOptionPane.showMessageDialog(this, "No hay archivo seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
+			} else {
+						//Limpiar el area de texto
 			textArea.setText("");
 			
 			//Mando el texto al textarea
@@ -175,6 +179,8 @@ public class BuscarTexto extends JFrame {
 			//Ponemos el nombre del archivo en el tútulo de la ventana
 			this.setTitle(gestor.getArchivo().getName() + ": BuscarTexto");
 			
+			}
+	
 		
 		
 	}
