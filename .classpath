@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="AgendaGraficaConArchivo/src"/>
+	<classpathentry kind="src" path="Archivos/src"/>
+	<classpathentry kind="src" path="BBDD/src"/>
+	<classpathentry kind="src" path="BBDDAgenda/src"/>
+	<classpathentry kind="src" path="Eclipse-Programacion/src"/>
+	<classpathentry kind="src" path="excepiones/src"/>
+	<classpathentry kind="src" path="Git/src"/>
+	<classpathentry kind="src" path="herencia/src"/>
+	<classpathentry kind="src" path="POO/src"/>
+	<classpathentry kind="src" path="ventana/src"/>
+	<classpathentry kind="lib" path="BBDD/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="lib" path="BBDDAgenda/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="output" path="AgendaGraficaConArchivo/bin"/>
+</classpath>
