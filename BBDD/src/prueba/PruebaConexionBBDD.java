@@ -77,7 +77,7 @@ public class PruebaConexionBBDD {
 			System.out.println("Error en la sentencia SQL");
 			e.printStackTrace();
 		}
-		
+		//hiolkiu
 		
 	}
 
