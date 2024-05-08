@@ -113,6 +113,10 @@ public class GestorArchivoIntervenciones {
 		//Recuperamos el objeto
 		while (true) {
 			//Falta esta parte
+			Intervencion v =  (Intervencion) stream.readObject();	
+			if (v.getMatricula().equals(matricula)) {
+				lista.add(v);				
+			}
 		}
 	
 	} catch (EOFException e) {
@@ -125,6 +129,9 @@ public class GestorArchivoIntervenciones {
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		System.out.println("Error de escritura");
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	} finally {
 		try {
 			stream.close();
