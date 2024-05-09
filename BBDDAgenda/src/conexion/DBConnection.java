@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBConnection {
 	private Connection conexion;
 
-	public DBConnection(Connection conexion) {
+	public DBConnection() {
 		try {
 			//Cargar el driver JDBC
 			Class.forName("com.mysql.jdbc.Driver");
