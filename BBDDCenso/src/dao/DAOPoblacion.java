@@ -7,23 +7,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import conexion.DBConnection;
-import entidades.Contacto;
+import entidades.Poblacion;
 
-public class DAOContactos {
+public class DAOPoblacion {
 
 	/*
-	 * Gestor encargado de la tabla contactos
+	 * Gestor encargado de la tabla Poblacions
 	 * Debería saber hacer un INSERT, UPDATE, DELETE, SELECT
 	 * Transformará los objetos en sentencias SQL y viceversa
 	 */
 	
 	
-	public DAOContactos() {
+	public DAOPoblacion() {
 		//Nada, constructor vacío
 	}
 	
 	//Método para guardar un objeto en la tabla
-	public void add(Contacto c) {
+	public void add(Poblacion c) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
@@ -31,18 +31,18 @@ public class DAOContactos {
 //			//Preparamos el objeto Sentencia(Statement)
 //			Statement sentencia = conexion.createStatement();		
 //			//Preparamos el instert
-//			String sql = "INSERT INTO contactos VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
+//			String sql = "INSERT INTO Poblacions VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
 //			sentencia.executeUpdate(sql);
 //			//Cerrar conexión
 //			conexion.close();
 			
 			//De otra manera, usando un PreparedStatement
-			String sql = "INSERT INTO contactos VALUES (?,?)";
+			String sql = "INSERT INTO Poblacion VALUES (?,?)";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
 			sentencia.setString(1, c.getNombre());
-			sentencia.setLong(2, c.getTelefono());
+			sentencia.setLong(2, c.getNumeroHabitantes());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
@@ -55,31 +55,32 @@ public class DAOContactos {
 	}
 	
 	//Método para actuaizar un objeto en la tabla
-	public void update(Contacto c) {
+	public void update(Poblacion c) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "UPDATE contactos SET telefono = ? WHERE nombre = ?";
+			String sql = "UPDATE Poblacion SET numerohabitantes = ? WHERE nombre = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
 			sentencia.setString(2, c.getNombre());
-			sentencia.setLong(1, c.getTelefono());
+			sentencia.setLong(1, c.getNumeroHabitantes());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el contacto");
+			System.out.println("Error actualizando el Poblacion");
 			e.printStackTrace();
 		}
 	}
+
 	//Método para eliminar un objeto en la tabla
-	public void remove(Contacto c) {
+	public void remove(Poblacion c) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
@@ -87,13 +88,13 @@ public class DAOContactos {
 //			//Preparamos el objeto Sentencia(Statement)
 //			Statement sentencia = conexion.createStatement();		
 //			//Preparamos el instert
-//			String sql = "INSERT INTO contactos VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
+//			String sql = "INSERT INTO Poblacions VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
 //			sentencia.executeUpdate(sql);
 //			//Cerrar conexión
 //			conexion.close();
 			
 			//De otra manera, usando un PreparedStatement
-			String sql = "DELETE from contactos where nombre = ?";
+			String sql = "DELETE from Poblacion where nombre = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
@@ -110,29 +111,29 @@ public class DAOContactos {
 	}
 	
 	//Método para obtener todos los objetos de la tabla
-	public ArrayList<Contacto> get() {
-		ArrayList<Contacto> lista = new ArrayList<Contacto>();
+	public ArrayList<Poblacion> get() {
+		ArrayList<Poblacion> lista = new ArrayList<Poblacion>();
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM contactos";
+			String sql = "SELECT *  FROM Poblacion";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			while (resultado.next()) {
-				new Contacto(resultado.getString("nombre"), resultado.getLong("telefono"));
-				lista.add(new Contacto(resultado.getString("nombre"), resultado.getLong("telefono")));
+//				new Poblacion(resultado.getString("nombre"), resultado.getLong("telefono"));
+				lista.add(new Poblacion(resultado.getString("nombre"), resultado.getLong("numerohabitantes")));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el contacto");
+			System.out.println("Error actualizando el Poblacion");
 			e.printStackTrace();
 		}
 		
@@ -140,18 +141,18 @@ public class DAOContactos {
 		
 		return lista;
 	}
+
 	//Método para obtener un objeto concreto de la tabla dado su nombre
-	
-	public Contacto get(String nombre) {
-		//Variable contacto
-		Contacto c = null;
+	public Poblacion get(String nombre) {
+		//Variable Poblacion
+		Poblacion c = null;
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM contactos WHERE nombre = ?";
+			String sql = "SELECT *  FROM Poblacion WHERE nombre = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			sentencia.setString(1, nombre);
@@ -159,13 +160,13 @@ public class DAOContactos {
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			if (resultado.next()) {
-				c = new Contacto(resultado.getString("nombre"), resultado.getLong("telefono"));
+				c = new  Poblacion(resultado.getString("nombre"), resultado.getLong("numerohabitantes"));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el contacto");
+			System.out.println("Error actualizando el Poblacion");
 			e.printStackTrace();
 		}
 		

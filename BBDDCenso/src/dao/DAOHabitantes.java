@@ -7,42 +7,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import conexion.DBConnection;
-import entidades.Contacto;
 
-public class DAOContactos {
+import entidades.Habitante;
 
-	/*
-	 * Gestor encargado de la tabla contactos
-	 * Debería saber hacer un INSERT, UPDATE, DELETE, SELECT
-	 * Transformará los objetos en sentencias SQL y viceversa
-	 */
-	
-	
-	public DAOContactos() {
-		//Nada, constructor vacío
+public class DAOHabitantes {
+
+	public DAOHabitantes() {
+		//Constructor vacío
 	}
-	
+
 	//Método para guardar un objeto en la tabla
-	public void add(Contacto c) {
+	public void add(Habitante h) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
-//			//Preparamos el objeto Sentencia(Statement)
-//			Statement sentencia = conexion.createStatement();		
-//			//Preparamos el instert
-//			String sql = "INSERT INTO contactos VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
-//			sentencia.executeUpdate(sql);
-//			//Cerrar conexión
-//			conexion.close();
 			
 			//De otra manera, usando un PreparedStatement
-			String sql = "INSERT INTO contactos VALUES (?,?)";
+			String sql = "INSERT INTO Habitante VALUES (?,?,?,?)";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
-			sentencia.setString(1, c.getNombre());
-			sentencia.setLong(2, c.getTelefono());
+			sentencia.setString(1, h.getNombre());
+			sentencia.setString(2, h.getEmail());
+			sentencia.setInt(3, h.getEdad());
+			sentencia.setString(4, h.getPoblacion());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
@@ -54,32 +43,36 @@ public class DAOContactos {
 		
 	}
 	
+
 	//Método para actuaizar un objeto en la tabla
-	public void update(Contacto c) {
+	public void update(Habitante h) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "UPDATE contactos SET telefono = ? WHERE nombre = ?";
+			String sql = "UPDATE Habitante SET edad = ?, email = ? WHERE nombre = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
-			sentencia.setString(2, c.getNombre());
-			sentencia.setLong(1, c.getTelefono());
+			sentencia.setString(3, h.getNombre());
+			sentencia.setString(2, h.getEmail());
+			sentencia.setInt(1, h.getEdad());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el contacto");
+			System.out.println("Error actualizando el Habitante");
 			e.printStackTrace();
 		}
 	}
+	
+	
 	//Método para eliminar un objeto en la tabla
-	public void remove(Contacto c) {
+	public void remove(Habitante h) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
@@ -87,17 +80,17 @@ public class DAOContactos {
 //			//Preparamos el objeto Sentencia(Statement)
 //			Statement sentencia = conexion.createStatement();		
 //			//Preparamos el instert
-//			String sql = "INSERT INTO contactos VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
+//			String sql = "INSERT INTO Habitantes VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
 //			sentencia.executeUpdate(sql);
 //			//Cerrar conexión
 //			conexion.close();
 			
 			//De otra manera, usando un PreparedStatement
-			String sql = "DELETE from contactos where nombre = ?";
+			String sql = "DELETE from Habitante where nombre = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
-			sentencia.setString(1, c.getNombre());
+			sentencia.setString(1, h.getNombre());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
@@ -108,31 +101,32 @@ public class DAOContactos {
 		}
 		
 	}
+	
 	
 	//Método para obtener todos los objetos de la tabla
-	public ArrayList<Contacto> get() {
-		ArrayList<Contacto> lista = new ArrayList<Contacto>();
+	public ArrayList<Habitante> get() {
+		ArrayList<Habitante> lista = new ArrayList<Habitante>();
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM contactos";
+			String sql = "SELECT *  FROM Habitante";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			while (resultado.next()) {
-				new Contacto(resultado.getString("nombre"), resultado.getLong("telefono"));
-				lista.add(new Contacto(resultado.getString("nombre"), resultado.getLong("telefono")));
+	//			new Habitante(resultado.getString("nombre"), resultado.getString("email"), resultado.getInt("edad"), resultado.getString("poblacion"));
+				lista.add(new Habitante(resultado.getString("nombre"), resultado.getString("email"), resultado.getInt("edad"), resultado.getString("poblacion")));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el contacto");
+			System.out.println("Error actualizando el Habitante");
 			e.printStackTrace();
 		}
 		
@@ -140,18 +134,19 @@ public class DAOContactos {
 		
 		return lista;
 	}
-	//Método para obtener un objeto concreto de la tabla dado su nombre
 	
-	public Contacto get(String nombre) {
-		//Variable contacto
-		Contacto c = null;
+	
+	//Método para obtener un objeto concreto de la tabla dado su nombre	
+	public Habitante get(String nombre) {
+		//Variable Habitante
+		Habitante h = null;
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM contactos WHERE nombre = ?";
+			String sql = "SELECT *  FROM Habitante WHERE nombre = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			sentencia.setString(1, nombre);
@@ -159,20 +154,54 @@ public class DAOContactos {
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			if (resultado.next()) {
-				c = new Contacto(resultado.getString("nombre"), resultado.getLong("telefono"));
+				h = new Habitante(resultado.getString("nombre"), resultado.getString("email"), resultado.getInt("edad"), resultado.getString("poblacion"));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el contacto");
+			System.out.println("Error actualizando el Habitante");
 			e.printStackTrace();
 		}
 		
 		
 		
-		return c;
+		return h;
 	}
+	
+	
+	//Método para obtener todos los objetos de la tabla
+	public ArrayList<Habitante> getHabitantesPorPoblacion(String Nombre) {
+		ArrayList<Habitante> lista = new ArrayList<Habitante>();
+		//Obtener una conexión a la base de datos
+		Connection conexion = new DBConnection().getConexion();
+		
+		try {
+			
+			// Usando un PreparedStatement
+			String sql = "SELECT *  FROM Habitante where poblacion = ?";
+			//Creo el Statement
+			PreparedStatement sentencia = conexion.prepareStatement(sql);
+			sentencia.setString(1, Nombre);
+			//Ejecuto
+			ResultSet resultado = sentencia.executeQuery();
+			while (resultado.next()) {
+	//			new Habitante(resultado.getString("nombre"), resultado.getString("email"), resultado.getInt("edad"), resultado.getString("poblacion"));
+				lista.add(new Habitante(resultado.getString("nombre"), resultado.getString("email"), resultado.getInt("edad"), resultado.getString("poblacion")));
+			}
+			//Cerrar conexión
+			conexion.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error actualizando el Habitante");
+			e.printStackTrace();
+		}
+		
+		
+		
+		return lista;
+	}
+	
 	
 	
 }
