@@ -15,6 +15,7 @@ import dao.DAOProductos;
 import entidades.Producto;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
@@ -28,6 +29,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaProductos extends JFrame {
 
@@ -136,6 +139,11 @@ public class VentanaProductos extends JFrame {
 		contentPane.add(comboBoxGrupo);
 		
 		btnModificar = new JButton("Modificar");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pulsadoModificar();
+			}
+		});
 		btnModificar.setBounds(305, 309, 89, 23);
 		contentPane.add(btnModificar);
 		cargarTabla();
@@ -176,4 +184,19 @@ public class VentanaProductos extends JFrame {
 		dtcr.setHorizontalAlignment(SwingConstants.RIGHT);
 		table.getColumnModel().getColumn(3).setCellRenderer(dtcr);
 	}
+	
+	private void pulsadoModificar() {
+		try {
+			Producto p = new Producto(Integer.parseInt(textFieldIdProducto.getText())
+														, textFieldNombreProducto.getText()
+														, daoGrupos.get( (String) comboBoxGrupo.getSelectedItem() ).getIdGrupo()
+														, Double.parseDouble(textFieldPrecio.getText()));
+			daoProductos.update(p);
+			cargarTabla();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, "Controla el precio", "error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 }

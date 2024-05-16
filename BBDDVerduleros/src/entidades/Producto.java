@@ -4,14 +4,14 @@ public class Producto {
 
 	private int idProducto;
 	private String nomProducto;
-	private int idGrupo;
+	private long idGrupo;
 	private double precio;
 	
-	public Producto(int idProducto, String nombre, int idGrupo, double precio) {
+	public Producto(int idProducto, String nombre, long l, double precio) {
 		super();
 		this.idProducto = idProducto;
 		this.nomProducto = nombre;
-		this.idGrupo = idGrupo;
+		this.idGrupo = l;
 		this.precio = precio;
 	}
 
@@ -31,7 +31,7 @@ public class Producto {
 		this.nomProducto = nombre;
 	}
 
-	public int getIdGrupo() {
+	public long getIdGrupo() {
 		return idGrupo;
 	}
 

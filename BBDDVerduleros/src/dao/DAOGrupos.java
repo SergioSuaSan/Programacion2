@@ -112,7 +112,7 @@ public class DAOGrupos {
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM Grupos";
+			String sql = "SELECT *  FROM Grupos ORDER BY idGrupo";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			
@@ -134,6 +134,40 @@ public class DAOGrupos {
 		
 		return lista;
 	}
+	
+	
+	//Método para obtener un objeto concreto de la tabla dado su nombre
+	public Grupo get(String idProducto) {
+		//Variable Grupo
+		Grupo c = null;
+		//Obtener una conexión a la base de datos
+		Connection conexion = new DBConnection().getConexion();
+		
+		try {
+			
+			// Usando un PreparedStatement
+			String sql = "SELECT *  FROM Grupos WHERE nombreGrupo = ?";
+			//Creo el Statement
+			PreparedStatement sentencia = conexion.prepareStatement(sql);
+			sentencia.setString(1, idProducto);
+			
+			//Ejecuto
+			ResultSet resultado = sentencia.executeQuery();
+			if (resultado.next()) {
+				c = new Grupo(resultado.getLong("idgrupo"),resultado.getString("nombregrupo"));
+			}
+			//Cerrar conexión
+			conexion.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error actualizando el Grupo");
+			e.printStackTrace();
+		}
+		
+	
+	return c;
+}
+
 
 	//Método para obtener un objeto concreto de la tabla dado su nombre
 	public Grupo get(long idProducto) {

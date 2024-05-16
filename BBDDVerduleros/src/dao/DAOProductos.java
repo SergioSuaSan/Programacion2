@@ -30,7 +30,7 @@ public class DAOProductos {
 			//Tengo que decirle qué dato va en cada interrogación
 			sentencia.setInt(1, h.getIdProducto());
 			sentencia.setString(2, h.getNombre());
-			sentencia.setInt(3, h.getIdGrupo());
+			sentencia.setLong(3, h.getIdGrupo());
 			sentencia.setDouble(4, h.getPrecio());
 			//Ejecuto
 			sentencia.executeUpdate();
@@ -58,7 +58,7 @@ public class DAOProductos {
 			//Tengo que decirle qué dato va en cada interrogación
 			sentencia.setInt(4, h.getIdProducto());
 			sentencia.setString(1, h.getNombre());
-			sentencia.setInt(2, h.getIdGrupo());
+			sentencia.setLong(2, h.getIdGrupo());
 			sentencia.setDouble(3, h.getPrecio());
 			//Ejecuto
 			sentencia.executeUpdate();
