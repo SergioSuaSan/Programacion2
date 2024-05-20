@@ -7,23 +7,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import conexion.DBConnection;
-import entidades.Evaluaciones;
+import entidades.Ticket;
 
-public class DAOEvaluaciones {
+public class DAOTicket {
 
 	/*
-	 * Gestor encargado de la tabla Evaluaciones
+	 * Gestor encargado de la tabla Ticket
 	 * Debería saber hacer un INSERT, UPDATE, DELETE, SELECT
 	 * Transformará los objetos en sentencias SQL y viceversa
 	 */
 	
 	
-	public DAOEvaluaciones() {
+	public DAOTicket() {
 		//Nada, constructor vacío
 	}
 	
 	//Método para guardar un objeto en la tabla
-	public void add(Evaluaciones c) {
+	public void add(Ticket c) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
@@ -31,21 +31,18 @@ public class DAOEvaluaciones {
 //			//Preparamos el objeto Sentencia(Statement)
 //			Statement sentencia = conexion.createStatement();		
 //			//Preparamos el instert
-//			String sql = "INSERT INTO Evaluaciones VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
+//			String sql = "INSERT INTO Ticket VALUES(' " +c.getNombre()+ " ' , "+c.getTelefono() + ")";
 //			sentencia.executeUpdate(sql);
 //			//Cerrar conexión
 //			conexion.close();
 			
 			//De otra manera, usando un PreparedStatement
-			String sql = "INSERT INTO Evaluaciones VALUES (?,?,?,?)";
+			String sql = "INSERT INTO Ticket VALUES (?,?)";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
-			sentencia.setInt(1, c.getCodigoAlumno());
-			sentencia.setInt(2, c.getCodigoCurso());
-			sentencia.setInt(3, c.getNotaFinal());
-			sentencia.setString(4, c.getObservaciones());
-		
+			sentencia.setInt(1, c.getNumero());
+			sentencia.setDate(2, c.getFecha());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
@@ -58,46 +55,43 @@ public class DAOEvaluaciones {
 	}
 	
 	//Método para actuaizar un objeto en la tabla
-	public void update(Evaluaciones c) {
+	public void update(Ticket c) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "UPDATE Evaluaciones SET NotaFinal = ?, Observaciones = ? WHERE CodigoAlumno = ? AND CodigoCurso= ?";
+			String sql = "UPDATE Ticket SET Fecha = ? WHERE Numero = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
-			sentencia.setInt(3, c.getCodigoAlumno());
-			sentencia.setInt(4, c.getCodigoCurso());
-			sentencia.setInt(1, c.getNotaFinal());
-			sentencia.setString(2, c.getObservaciones());
+			sentencia.setInt(2, c.getNumero());
+			sentencia.setDate(1, c.getFecha());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el Evaluaciones");
+			System.out.println("Error actualizando el Ticket");
 			e.printStackTrace();
 		}
 	}
 
 	//Método para eliminar un objeto en la tabla
-	public void remove(Evaluaciones c) {
+	public void remove(Ticket c) {
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 
 			//De otra manera, usando un PreparedStatement
-			String sql = "DELETE from Evaluaciones where CodigoAlumno = ? AND CodigoCurso = ?";
+			String sql = "DELETE from Ticket where numero = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			//Tengo que decirle qué dato va en cada interrogación
-			sentencia.setInt(1, c.getCodigoAlumno());
-			sentencia.setInt(2, c.getCodigoCurso());
+			sentencia.setLong(1, c.getNumero());
 			//Ejecuto
 			sentencia.executeUpdate();
 			//Cerrar conexión
@@ -110,29 +104,29 @@ public class DAOEvaluaciones {
 	}
 	
 	//Método para obtener todos los objetos de la tabla
-	public ArrayList<Evaluaciones> get() {
-		ArrayList<Evaluaciones> lista = new ArrayList<Evaluaciones>();
+	public ArrayList<Ticket> get() {
+		ArrayList<Ticket> lista = new ArrayList<Ticket>();
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM Evaluaciones";
+			String sql = "SELECT *  FROM Ticket ORDER BY idTicket";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			while (resultado.next()) {
-//				new Evaluaciones(resultado.getString("nombre"), resultado.getLong("telefono"));
-				lista.add(new Evaluaciones(resultado.getInt("CodigoAlumno"),resultado.getInt("CodigoCurso"), resultado.getInt("NotaFinal"), resultado.getString("Observaciones")));
+//				new Ticket(resultado.getString("nombre"), resultado.getLong("telefono"));
+				lista.add(new Ticket(resultado.getInt("Numero"), resultado.getDate("Fecha")));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el Evaluaciones");
+			System.out.println("Error actualizando el Ticket");
 			e.printStackTrace();
 		}
 		
@@ -143,16 +137,16 @@ public class DAOEvaluaciones {
 	
 	/*
 	//Método para obtener un objeto concreto de la tabla dado su nombre
-	public Evaluaciones get(String idProducto) {
-		//Variable Evaluaciones
-		Evaluaciones c = null;
+	public Ticket get(String idProducto) {
+		//Variable Ticket
+		Ticket c = null;
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM Evaluaciones WHERE nombreEvaluaciones = ?";
+			String sql = "SELECT *  FROM Ticket WHERE nombreTicket = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			sentencia.setString(1, idProducto);
@@ -160,13 +154,13 @@ public class DAOEvaluaciones {
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			if (resultado.next()) {
-				c = new Evaluaciones(resultado.getLong("idEvaluaciones"),resultado.getString("nombreEvaluaciones"));
+				c = new Ticket(resultado.getInt("Numero"), resultado.getDate("Fecha"));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el Evaluaciones");
+			System.out.println("Error actualizando el Ticket");
 			e.printStackTrace();
 		}
 		
@@ -176,16 +170,16 @@ public class DAOEvaluaciones {
 
 
 	//Método para obtener un objeto concreto de la tabla dado su nombre
-	public Evaluaciones get(long idProducto) {
-		//Variable Evaluaciones
-		Evaluaciones c = null;
+	public Ticket get(long idProducto) {
+		//Variable Ticket
+		Ticket c = null;
 		//Obtener una conexión a la base de datos
 		Connection conexion = new DBConnection().getConexion();
 		
 		try {
 			
 			// Usando un PreparedStatement
-			String sql = "SELECT *  FROM Evaluaciones WHERE idEvaluaciones = ?";
+			String sql = "SELECT *  FROM Ticket WHERE idTicket = ?";
 			//Creo el Statement
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			sentencia.setLong(1, idProducto);
@@ -193,13 +187,13 @@ public class DAOEvaluaciones {
 			//Ejecuto
 			ResultSet resultado = sentencia.executeQuery();
 			if (resultado.next()) {
-				c = new Evaluaciones(resultado.getLong("idEvaluaciones"),resultado.getString("nombreEvaluaciones"));
+				c = new Ticket(resultado.getInt("Numero"), resultado.getDate("Fecha"));
 			}
 			//Cerrar conexión
 			conexion.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error actualizando el Evaluaciones");
+			System.out.println("Error actualizando el Ticket");
 			e.printStackTrace();
 		}
 		
